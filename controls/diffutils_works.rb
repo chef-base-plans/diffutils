@@ -10,8 +10,10 @@ control 'core-plans-diffutils-works' do
   Verify diffutils by ensuring 
   (1) its installation directory exists and 
   (2) that it returns the expected version.
-  (3) should detect equal contents
-  (4) should detect different content
+  (3) should detect equal contents and also different content.  Note
+  since the diff <(..) <(..) works in bash, not in sh, and command(..)
+  uses sh, then explicit use of bash(..) not command(..) was used to
+  do the verification
   '
   
   plan_installation_directory = command("hab pkg path #{plan_origin}/#{plan_name}")
@@ -31,17 +33,29 @@ control 'core-plans-diffutils-works' do
     its('stderr') { should be_empty }
   end
 
-  alpha_file = "/hab/svc/diffutils/config/fixtures/alpha"
-  describe command("#{command_full_path} #{alpha_file} #{alpha_file}") do
+  describe command("hab pkg binlink core/busybox-static echo") do
     its('exit_status') { should eq 0 }
-    its('stdout') { should be_empty }
+    its('stdout') { should_not be_empty }
+    its('stdout') { should match /Binlinked echo from core\/busybox-static\/[^\s]*\s+to\s+\/bin\/echo/ }
     its('stderr') { should be_empty }
   end
-  
-  beta_file = "/hab/svc/diffutils/config/fixtures/beta"
-  describe command("#{command_full_path} #{alpha_file} #{beta_file}") do
-    its('exit_status') { should_not eq 0 }
-    its('stdout') { should_not be_empty }
+
+  describe bash("#{command_full_path} <(echo 'alpha' ) <(echo 'alpha')") do
+    its('exit_status') { should eq 0 }
     its('stderr') { should be_empty }
+    its('stdout') { should be_empty }
+  end
+  
+  expected = <<~EOF
+    1c1
+    < bob
+    ---
+    > harry
+  EOF
+  describe bash("#{command_full_path} <(echo 'bob') <(echo 'harry')") do
+    its('exit_status') { should_not eq 0 }
+    its('stderr') { should be_empty }
+    its('stdout') { should_not be_empty }
+    its('stdout') { should match /#{expected}/ }
   end
 end
