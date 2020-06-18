@@ -24,7 +24,7 @@ control 'core-plans-diffutils-works' do
   end
   
   command_relative_path = input('command_relative_path', value: 'bin/diff')
-  command_full_path = File.join(plan_installation_directory.stdout.strip, "#{command_relative_path}")
+  command_full_path = File.join(plan_installation_directory.stdout.strip, command_relative_path)
   plan_pkg_version = plan_installation_directory.stdout.split("/")[5]
   describe command("#{command_full_path} --version") do
     its('exit_status') { should eq 0 }
