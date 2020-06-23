@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/chefcorp-partnerengineering/Chef%20Base%20Plans/_apis/build/status/chef-base-plans.diffutils?branchName=master)](https://dev.azure.com/chefcorp-partnerengineering/Chef%20Base%20Plans/_build/latest?definitionId=69&branchName=master)
+[![Build Status](https://dev.azure.com/chefcorp-partnerengineering/Chef%20Base%20Plans/_apis/build/status/chef-base-plans.diffutils?branchName=master)](https://dev.azure.com/chefcorp-partnerengineering/Chef%20Base%20Plans/_build/latest?definitionId=124&branchName=master)
 
 # diffutils
 
@@ -38,6 +38,25 @@ will add the following binaries to the PATH:
 * diff
 * diff3
 * sdiff
+
+```bash
+$ hab pkg install core/diffutils --binlink
+» Installing core/diffutils
+☁ Determining latest version of core/diffutils in the 'stable' channel
+☛ Verifying core/diffutils/3.7/20200306000423
+→ Using core/glibc/2.29/20200305172459
+→ Using core/linux-headers/4.19.62/20200305172241
+✓ Installed core/diffutils/3.7/20200306000423
+★ Install of core/diffutils/3.7/20200306000423 complete with 1 new packages installed.
+» Binlinking cmp from core/diffutils/3.7/20200306000423 into /bin
+★ Binlinked cmp from core/diffutils/3.7/20200306000423 to /bin/cmp
+» Binlinking diff from core/diffutils/3.7/20200306000423 into /bin
+★ Binlinked diff from core/diffutils/3.7/20200306000423 to /bin/diff
+» Binlinking diff3 from core/diffutils/3.7/20200306000423 into /bin
+★ Binlinked diff3 from core/diffutils/3.7/20200306000423 to /bin/diff3
+» Binlinking sdiff from core/diffutils/3.7/20200306000423 into /bin
+★ Binlinked sdiff from core/diffutils/3.7/20200306000423 to /bin/sdiff
+```
 
 #### Using an example binary
 
