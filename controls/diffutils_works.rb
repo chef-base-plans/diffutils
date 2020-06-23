@@ -2,6 +2,7 @@ title 'Tests to confirm diffutils works as expected'
 
 plan_origin = ENV['HAB_ORIGIN']
 plan_name = input('plan_name', value: 'diffutils')
+hab_path = input('hab_path', value: '/tmp/hab')
 
 control 'core-plans-diffutils-works' do
   impact 1.0
@@ -16,11 +17,10 @@ control 'core-plans-diffutils-works' do
   do the verification
   '
   
-  plan_installation_directory = command("hab pkg path #{plan_origin}/#{plan_name}")
+  plan_installation_directory = command("#{hab_path} pkg path #{plan_origin}/#{plan_name}")
   describe plan_installation_directory do
     its('exit_status') { should eq 0 }
     its('stdout') { should_not be_empty }
-    its('stderr') { should be_empty }
   end
   
   command_relative_path = input('command_relative_path', value: 'bin/diff')
@@ -30,19 +30,10 @@ control 'core-plans-diffutils-works' do
     its('exit_status') { should eq 0 }
     its('stdout') { should_not be_empty }
     its('stdout') { should match /diff \(GNU diffutils\) #{plan_pkg_version}/ }
-    its('stderr') { should be_empty }
-  end
-
-  describe command("hab pkg binlink core/busybox-static echo") do
-    its('exit_status') { should eq 0 }
-    its('stdout') { should_not be_empty }
-    its('stdout') { should match /Binlinked echo from core\/busybox-static\/[^\s]*\s+to\s+\/bin\/echo/ }
-    its('stderr') { should be_empty }
   end
 
   describe bash("#{command_full_path} <(echo 'alpha' ) <(echo 'alpha')") do
     its('exit_status') { should eq 0 }
-    its('stderr') { should be_empty }
     its('stdout') { should be_empty }
   end
   
@@ -54,7 +45,6 @@ control 'core-plans-diffutils-works' do
   EOF
   describe bash("#{command_full_path} <(echo 'bob') <(echo 'harry')") do
     its('exit_status') { should_not eq 0 }
-    its('stderr') { should be_empty }
     its('stdout') { should_not be_empty }
     its('stdout') { should match /#{expected}/ }
   end
