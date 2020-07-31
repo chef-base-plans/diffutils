@@ -2,7 +2,6 @@ title 'Tests to confirm diffutils works as expected'
 
 plan_origin = ENV['HAB_ORIGIN']
 plan_name = input('plan_name', value: 'diffutils')
-hab_path = input('hab_path', value: '/tmp/hab')
 
 control 'core-plans-diffutils-works' do
   impact 1.0
@@ -17,7 +16,7 @@ control 'core-plans-diffutils-works' do
   do the verification
   '
   
-  plan_installation_directory = command("#{hab_path} pkg path #{plan_origin}/#{plan_name}")
+  plan_installation_directory = command("hab pkg path #{plan_origin}/#{plan_name}")
   describe plan_installation_directory do
     its('exit_status') { should eq 0 }
     its('stdout') { should_not be_empty }
